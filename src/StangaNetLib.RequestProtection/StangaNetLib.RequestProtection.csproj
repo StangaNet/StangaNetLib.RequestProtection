@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <AssemblyName>StangaNetLib.RequestProtection</AssemblyName>
+    <RootNamespace>StangaNetLib.RequestProtection</RootNamespace>
+    <Version>1.0.0</Version>
+    <Description>HTTP request protection for ASP.NET Core: distributed fixed-window rate limiting and idempotency deduplication, both backed by StangaNetLib.Caching.</Description>
+    <PackageTags>rate-limiting;idempotency;middleware;aspnetcore;distributed;stanganet</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="StangaNetLib.RequestProtection.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="StangaNetLib.Core" />
+    <PackageReference Include="StangaNetLib.Caching" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\**" Pack="true" PackagePath="build/" />
+  </ItemGroup>
+
+  <Target Name="StampBuildProps" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <_BuildPropsFile>$(MSBuildThisFileDirectory)..\..\build\StangaNetLib.RequestProtection.props</_BuildPropsFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <_BPLines Include="&lt;Project&gt;" />
+      <_BPLines Include="  &lt;ItemGroup&gt;" />
+      <_BPLines Include="    &lt;AssemblyAttribute Include=&quot;System.Reflection.AssemblyMetadataAttribute&quot;&gt;" />
+      <_BPLines Include="      &lt;_Parameter1&gt;StangaNetLib.RequestProtection&lt;/_Parameter1&gt;" />
+      <_BPLines Include="      &lt;_Parameter2&gt;$(Version)&lt;/_Parameter2&gt;" />
+      <_BPLines Include="    &lt;/AssemblyAttribute&gt;" />
+      <_BPLines Include="  &lt;/ItemGroup&gt;" />
+      <_BPLines Include="&lt;/Project&gt;" />
+    </ItemGroup>
+    <WriteLinesToFile
+      File="$(_BuildPropsFile)"
+      Lines="@(_BPLines)"
+      Overwrite="true"
+      Encoding="UTF-8" />
+    <Message Text="StangaNetLib.RequestProtection: stamped build props with version $(Version)" Importance="high" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\assets\package-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
