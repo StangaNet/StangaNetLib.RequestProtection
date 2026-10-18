@@ -1,0 +1,27 @@
+name: .NET CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  ci:
+    uses: StangaNet/.github/.github/workflows/dotnet-lib.yml@main
+    with:
+      library-name: 'StangaNetLib.RequestProtection'
+      artifact-name: 'stanganetlib-requestprotection-nuget'
+      # Auth attaches GITHUB_TOKEN to the StangaNet source declared in nuget.config
+      needs-github-packages-source: true
+      publish: ${{ github.event_name != 'pull_request' }}
+    secrets: inherit
