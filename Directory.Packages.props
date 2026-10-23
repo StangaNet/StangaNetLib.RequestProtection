@@ -6,7 +6,7 @@
     <!-- StangaNetLib foundation — pin Caching ≥1.0.1 (1.0.0 feed nuspec was poisoned with ME 10) -->
     <PackageVersion Include="StangaNetLib.Core" Version="1.0.0" />
     <PackageVersion Include="StangaNetLib.Caching" Version="1.0.1" />
-    <!-- Runtime dependencies — align with lowest TFM (net8) for dual-targeting -->
+    <!-- Runtime dependencies — align with lowest TFM (net8) for multi-targeting (net8/net9/net10) -->
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />

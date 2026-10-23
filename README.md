@@ -2,7 +2,7 @@
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.RequestProtection/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.RequestProtection/actions/workflows/main.yml)
 ![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
-![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
+![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
 HTTP request protection for ASP.NET Core: distributed fixed-window rate limiting and idempotency deduplication, both backed by [`StangaNetLib.Caching`](https://github.com/StangaNet/StangaNetLib.Caching) (`ICacheService`).
 

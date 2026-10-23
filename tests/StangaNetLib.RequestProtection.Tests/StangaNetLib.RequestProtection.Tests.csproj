@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>StangaNetLib.RequestProtection.Tests</AssemblyName>
     <RootNamespace>StangaNetLib.RequestProtection.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <UseAppHost>true</UseAppHost>
     <NoWarn>$(NoWarn);xUnit1051</NoWarn>
   </PropertyGroup>
@@ -19,6 +19,7 @@
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="8.*" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="9.*" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" VersionOverride="10.*" Condition="'$(TargetFramework)' == 'net10.0'" />
   </ItemGroup>
 
   <ItemGroup>
