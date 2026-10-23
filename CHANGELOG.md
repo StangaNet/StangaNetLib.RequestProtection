@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.1.0] - 2026-10-23
+
+### Added
+- `AddStangaNetLibAuthLockoutRateLimit` preset policy `"AuthLockout"` (endpoint rate limit for login surfaces).
+- Idempotency `RequireKey` with `RequiredPathPrefixes` / `RequiredPathPatterns` (HTTP 400 when missing).
+
 ## [1.0.1] - 2026-10-23
 
 ### Changed

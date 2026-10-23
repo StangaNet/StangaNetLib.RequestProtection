@@ -57,6 +57,16 @@ public sealed partial class IdempotencyMiddleware
         var idempotencyKey = context.Request.Headers[_options.HeaderName].FirstOrDefault();
         if (string.IsNullOrWhiteSpace(idempotencyKey))
         {
+            if (_options.RequiresKeyForPath(context.Request.Path.Value))
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = $"Missing required '{_options.HeaderName}' header for this sensitive write/import endpoint.",
+                });
+                return;
+            }
+
             await _next(context);
             return;
         }

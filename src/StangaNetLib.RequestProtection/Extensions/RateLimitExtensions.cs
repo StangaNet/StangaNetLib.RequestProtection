@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StangaNetLib.RequestProtection.RateLimit.Abstractions;
 using StangaNetLib.RequestProtection.RateLimit.Middleware;
+using StangaNetLib.RequestProtection.RateLimit.Models;
 using StangaNetLib.RequestProtection.RateLimit.Services;
 using StangaNetLib.RequestProtection.RateLimit.Settings;
 using StangaNetLib.RequestProtection.RateLimit.Stores;
@@ -71,5 +72,38 @@ public static class RateLimitExtensions
     {
         app.UseMiddleware<DistributedRateLimitingMiddleware>();
         return app;
+    }
+
+    /// <summary>
+    /// Policy name for the auth lockout rate-limit preset. Use with <c>[RateLimit("AuthLockout")]</c>.
+    /// </summary>
+    public const string AuthLockoutPolicyName = "AuthLockout";
+
+    /// <summary>
+    /// Registers the <c>AuthLockout</c> rate-limit preset (default: 5 requests / 15 minutes / IP).
+    /// This is an endpoint rate limit for failed-login surfaces; account-level lockout belongs in
+    /// Auth <c>ILoginAttemptService</c> — combine both for defence in depth.
+    /// Call after <see cref="AddStangaNetLibRateLimit"/>.
+    /// </summary>
+    public static IServiceCollection AddStangaNetLibAuthLockoutRateLimit(
+        this IServiceCollection services,
+        int limit = 5,
+        int windowSeconds = 900)
+    {
+        services.PostConfigure<RateLimitingSettings>(settings =>
+        {
+            if (settings.Policies.Any(p => p.Name.Equals(AuthLockoutPolicyName, StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            settings.Policies.Add(new RateLimitPolicy
+            {
+                Name = AuthLockoutPolicyName,
+                Limit = limit,
+                WindowSeconds = windowSeconds,
+                Scope = RateLimitScope.IP,
+            });
+        });
+
+        return services;
     }
 }

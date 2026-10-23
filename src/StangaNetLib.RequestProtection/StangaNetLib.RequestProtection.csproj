@@ -3,7 +3,7 @@
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.RequestProtection</AssemblyName>
     <RootNamespace>StangaNetLib.RequestProtection</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Description>HTTP request protection for ASP.NET Core: distributed fixed-window rate limiting and idempotency deduplication, both backed by StangaNetLib.Caching.</Description>
     <PackageTags>rate-limiting;idempotency;middleware;aspnetcore;distributed;stanganet</PackageTags>
   </PropertyGroup>

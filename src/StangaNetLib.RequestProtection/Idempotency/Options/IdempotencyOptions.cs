@@ -28,6 +28,58 @@ public sealed class IdempotencyOptions
     /// </summary>
     public TimeSpan LockTimeout { get; set; } = TimeSpan.FromSeconds(30);
 
+    /// <summary>
+    /// When <c>true</c>, requests that match <see cref="RequiredPathPrefixes"/> /
+    /// <see cref="RequiredPathPatterns"/> must include <see cref="HeaderName"/> or receive HTTP 400.
+    /// </summary>
+    public bool RequireKey { get; set; }
+
+    /// <summary>
+    /// Path prefixes (e.g. <c>/api/import</c>) that require an idempotency key when <see cref="RequireKey"/> is true.
+    /// Comparison is ordinal-ignore-case against <c>Path.Value</c>.
+    /// </summary>
+    public ICollection<string> RequiredPathPrefixes { get; set; } = [];
+
+    /// <summary>
+    /// Simple wildcard path patterns (e.g. <c>/api/*/write</c>) that require an idempotency key
+    /// when <see cref="RequireKey"/> is true. <c>*</c> matches a single path segment.
+    /// </summary>
+    public ICollection<string> RequiredPathPatterns { get; set; } = [];
+
     internal bool IsProtectedMethod(string httpMethod)
         => ProtectedMethods.Any(m => m.Equals(httpMethod, StringComparison.OrdinalIgnoreCase));
+
+    internal bool RequiresKeyForPath(string? path)
+    {
+        if (!RequireKey || string.IsNullOrEmpty(path))
+            return false;
+
+        if (RequiredPathPrefixes.Any(p =>
+                !string.IsNullOrEmpty(p)
+                && path.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        return RequiredPathPatterns.Any(pattern => MatchesPathPattern(path, pattern));
+    }
+
+    private static bool MatchesPathPattern(string path, string pattern)
+    {
+        if (string.IsNullOrWhiteSpace(pattern))
+            return false;
+
+        var pathParts = path.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var patternParts = pattern.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (pathParts.Length != patternParts.Length)
+            return false;
+
+        for (var i = 0; i < patternParts.Length; i++)
+        {
+            if (patternParts[i] == "*")
+                continue;
+            if (!patternParts[i].Equals(pathParts[i], StringComparison.OrdinalIgnoreCase))
+                return false;
+        }
+
+        return true;
+    }
 }
